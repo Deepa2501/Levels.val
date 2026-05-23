@@ -22,7 +22,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://levels-val.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -233,9 +235,7 @@ def validate_submission(submission: SalarySubmission, db: Session = Depends(get_
             detail=f"An error occurred during submission validation: {str(e)}"
         )
 
-@app.options("/{full_path:path}")
-def preflight_handler(full_path: str):
-    return {"status": "ok"}
+
 @app.get("/model-insights", status_code=status.HTTP_200_OK)
 def get_model_insights(db: Session = Depends(get_db)):
     """Exposes statistics on training datasets and ML model feature importances."""
