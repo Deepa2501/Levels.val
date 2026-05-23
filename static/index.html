@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Salary Validation Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="theme-synthwave">
+    <div class="stars"></div>
+    <div class="glowing-orb orb-1"></div>
+    <div class="glowing-orb orb-2"></div>
+
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <span class="pulse-dot"></span>
+                <h1>Levels<span>.val</span></h1>
+            </div>
+            <p class="subtitle">Real-time AI Salary Verification & Outlier Engine</p>
+            <div class="header-controls">
+                <button class="small-btn theme-toggle-btn" id="theme-toggle">
+                    Theme: <span id="theme-name">Synthwave</span>
+                </button>
+                <div class="api-status">
+                    <span class="status-indicator online" id="server-status-led"></span>
+                    <span class="status-text" id="server-status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Grid -->
+        <main class="dashboard-grid">
+            
+            <!-- Left Panel: Submission Form -->
+            <section class="glass-card form-section">
+                <div class="card-header">
+                    <h2>Verify Submission</h2>
+                    <p>Enter offer details to check market alignment and validation scores.</p>
+                </div>
+                
+                <form id="salary-form" class="verification-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" required placeholder="e.g. Google, Microsoft, TCS">
+                        </div>
+                    </div>
+
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="role">Role / Title</label>
+                            <select id="role" required>
+                                <option value="Software Engineer">Software Engineer</option>
+                                <option value="Senior Software Engineer">Senior Software Engineer</option>
+                                <option value="Tech Lead">Tech Lead</option>
+                                <option value="Data Scientist">Data Scientist</option>
+                                <option value="Product Manager">Product Manager</option>
+                                <option value="Engineering Manager">Engineering Manager</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <select id="location" required>
+                                <option value="Bengaluru">Bengaluru</option>
+                                <option value="Hyderabad">Hyderabad</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Chennai">Chennai</option>
+                                <option value="SF Bay Area">SF Bay Area</option>
+                                <option value="Seattle">Seattle</option>
+                                <option value="Remote">Remote</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="level">Level / Grade</label>
+                            <select id="level" required>
+                                <option value="IC1">IC1 (Entry SE)</option>
+                                <option value="IC2">IC2 (Mid-Level SE)</option>
+                                <option value="IC3">IC3 (Senior / PM / DS)</option>
+                                <option value="IC4">IC4 (Tech Lead / Principal)</option>
+                                <option value="M1">M1 (Engineering Manager)</option>
+                                <option value="M2">M2 (Senior EM)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="yearsOfExperience">Experience (Years)</label>
+                            <input type="number" id="yearsOfExperience" required step="0.1" min="0" max="40" placeholder="e.g. 3.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="offerDate">Offer Date</label>
+                            <input type="date" id="offerDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="totalCompensation">Total Compensation</label>
+                            <input type="number" id="totalCompensation" required min="1" placeholder="e.g. 2400000">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select id="currency" required>
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="baseSalary">Base Salary</label>
+                            <input type="number" id="baseSalary" required min="0" placeholder="e.g. 1800000">
+                        </div>
+                        <div class="form-group">
+                            <label for="avgAnnualStockGrantValue">Annual Stock</label>
+                            <input type="number" id="avgAnnualStockGrantValue" required min="0" placeholder="e.g. 400000">
+                        </div>
+                        <div class="form-group">
+                            <label for="avgAnnualBonusValue">Annual Bonus</label>
+                            <input type="number" id="avgAnnualBonusValue" required min="0" placeholder="e.g. 200000">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ipAddress">Client IP Address</label>
+                            <input type="text" id="ipAddress" required placeholder="192.168.1.10">
+                            <span class="field-hint" id="generate-ip-btn">Randomize IP Address</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="glow-button" id="submit-btn">
+                        <span>Analyze Submission</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Panel: Validation Results -->
+            <section class="glass-card result-section" id="results-panel">
+                <!-- Initial State -->
+                <div class="empty-state" id="results-empty">
+                    <div class="empty-icon">📊</div>
+                    <h3>Waiting for Submission</h3>
+                    <p>Enter data and click "Analyze Submission" to trigger machine learning validation models.</p>
+                </div>
+
+                <!-- Results Display (Hidden Initially) -->
+                <div class="results-display hidden" id="results-display">
+                    <div class="card-header">
+                        <h2>Validation Outcome</h2>
+                        <div class="status-badge" id="val-status-badge">
+                            <span class="badge-dot"></span>
+                            <span class="badge-text" id="val-status-text">ACCEPTED</span>
+                        </div>
+                    </div>
+
+                    <!-- Trust Score Circular Gauge -->
+                    <div class="score-container">
+                        <div class="gauge-wrapper">
+                            <svg class="gauge-svg" viewBox="0 0 100 100">
+                                <circle class="gauge-bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="gauge-fill" id="gauge-fill-circle" cx="50" cy="50" r="45"></circle>
+                            </svg>
+                            <div class="gauge-text">
+                                <span class="gauge-val" id="val-trust-score">0</span>
+                                <span class="gauge-label">TRUST SCORE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submitted Details -->
+                    <div class="submitted-details-box">
+                        <h3>Submitted Details</h3>
+                        <div class="details-grid">
+                            <div class="detail-group">
+                                <span class="lbl">Profile</span>
+                                <span class="val" id="val-submitted-profile">-</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="lbl">Location &amp; YOE</span>
+                                <span class="val" id="val-submitted-loc-yoe">-</span>
+                            </div>
+                        </div>
+                        <div class="details-grid components-grid">
+                            <div class="detail-group">
+                                <span class="lbl">Total Compensation</span>
+                                <span class="val highlight" id="val-submitted-tc">-</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="lbl">Base Salary</span>
+                                <span class="val" id="val-submitted-base">-</span>
+                            </div>
+                            <div class="detail-group text-center">
+                                <span class="lbl">Annual Stock</span>
+                                <span class="val" id="val-submitted-stock">-</span>
+                            </div>
+                            <div class="detail-group text-right">
+                                <span class="lbl">Annual Bonus</span>
+                                <span class="val" id="val-submitted-bonus">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Details -->
+                    <div class="details-list">
+                        <div class="detail-item">
+                            <span class="lbl">Normalized Compensation</span>
+                            <span class="val bold" id="val-norm-salary">0 INR</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="lbl">Deviation from Market Average</span>
+                            <span class="val" id="val-deviation">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Range Visualizer -->
+                    <div class="range-visualizer-container">
+                        <div class="range-labels">
+                            <span>Market Min (P10)</span>
+                            <span>Average</span>
+                            <span>Market Max (P90)</span>
+                        </div>
+                        <div class="range-bar-track">
+                            <div class="range-zone" id="val-range-zone"></div>
+                            <div class="range-salary-marker" id="val-salary-marker">
+                                <div class="marker-tooltip" id="val-marker-tooltip">You</div>
+                            </div>
+                        </div>
+                        <div class="range-values">
+                            <span id="val-range-min">0</span>
+                            <span id="val-range-avg">0</span>
+                            <span id="val-range-max">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Bell Curve Section -->
+                    <div class="distribution-section">
+                        <h3>Salary Distribution Curve</h3>
+                        <div class="canvas-wrapper">
+                            <canvas id="distribution-canvas" height="140"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- System Warnings Logs -->
+                    <div class="logs-section">
+                        <h3>Scoring Explanations</h3>
+                        <ul class="reasons-list" id="val-reasons-list">
+                            <!-- Injected dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Insights and Stats Panel -->
+        <section class="glass-card insights-section">
+            <div class="insights-header">
+                <div>
+                    <h2>Model Insights & Feature Importance</h2>
+                    <p>Understanding which parameters dictate compensation ranges (live from RandomForest pipeline).</p>
+                </div>
+                <div class="insights-controls">
+                    <button class="small-btn" id="retrain-btn">Retrain Model</button>
+                </div>
+            </div>
+            
+            <div class="insights-grid">
+                <!-- Training Metadata -->
+                <div class="meta-box">
+                    <div class="stat-row">
+                        <div class="stat-card">
+                            <span class="num" id="stat-total-records">0</span>
+                            <span class="lbl">Total Training Samples</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="num" id="stat-db-records">0</span>
+                            <span class="lbl">DB Submissions</span>
+                        </div>
+                    </div>
+                    <div class="model-note">
+                        <p><strong>Note on feedback loop:</strong> Every time a salary submission is verified and has an accepted status, it is stored in the database. Clicking <strong>Retrain Model</strong> merges these entries back into the training corpus, enhancing the prediction boundaries.</p>
+                    </div>
+                </div>
+
+                <!-- Feature Importance Chart -->
+                <div class="importance-chart-box">
+                    <h3>Top Feature Weights</h3>
+                    <div class="bar-chart-container" id="feature-chart">
+                        <div class="chart-loading">Loading weights...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Database Audit Log (History Table) -->
+        <section class="glass-card history-section">
+            <div class="history-header">
+                <h2>Database Audit Trail</h2>
+                <p>Displaying recent submissions written to SQLite. Accepted entries are dynamically merged into ML training data on retraining.</p>
+            </div>
+            <div class="table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Company</th>
+                            <th>Role</th>
+                            <th>Level</th>
+                            <th>Location</th>
+                            <th>Exp (YOE)</th>
+                            <th>Submitted Salary</th>
+                            <th>Trust Score</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <tr>
+                            <td colspan="9" class="empty-table">No history records loaded.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
