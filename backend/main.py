@@ -4,6 +4,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, model_validator
 from typing import List, Optional
 import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import pandas as pd
 from sqlalchemy.orm import Session
@@ -16,6 +18,14 @@ app = FastAPI(
     title="AI-Powered Salary Validation API",
     description="A production-ready validation engine to check compensation submissions, identify anomalies, and detect spam.",
     version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Global variables/services
