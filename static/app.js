@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
+    const API_BASE = "https://levels-val.onrender.com";
     const salaryForm = document.getElementById("salary-form");
     const generateIpBtn = document.getElementById("generate-ip-btn");
     const ipAddressInput = document.getElementById("ipAddress");
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("/validate-submission", {
+            const response = await fetch("${API_BASE}/validate-submission", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
@@ -116,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast("Model retraining cycle triggered in background.");
 
         try {
-            const response = await fetch("/train", { method: "POST" });
+            const response = await fetch("${API_BASE}/train", { method: "POST" });
             if (!response.ok) throw new Error("Retraining trigger failed.");
             pollTrainingStatus();
         } catch (error) {
@@ -184,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadInsights() {
         try {
-            const response = await fetch("/model-insights");
+            const response = await fetch("${API_BASE}/model-insights");
             if (!response.ok) throw new Error();
             
             const data = await response.json();
@@ -200,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadHistory() {
         try {
-            const response = await fetch("/submissions");
+            const response = await fetch("${API_BASE}/submissions");
             if (!response.ok) throw new Error("Failed to load submissions audit history.");
             
             const data = await response.json();
