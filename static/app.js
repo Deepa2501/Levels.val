@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // Backend API Base URL
-    const API_BASE = "http://levels-val.onrender.com";
+    const API_BASE = "https://levels-val.onrender.com";
 
     // DOM Elements
     const salaryForm = document.getElementById("salary-form");
