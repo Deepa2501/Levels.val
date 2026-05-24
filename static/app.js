@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("${API_BASE}/validate-submission", {
+            const response = await fetch('${API_BASE}/validate-submission', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast("Model retraining cycle triggered in background.");
 
         try {
-            const response = await fetch("${API_BASE}/train", { method: "POST" });
+            const response = await fetch('${API_BASE}/train', { method: "POST" });
             if (!response.ok) throw new Error("Retraining trigger failed.");
             pollTrainingStatus();
         } catch (error) {
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function checkServerStatus() {
         try {
-            const response = await fetch("${API_BASE}/health");
+            const response = await fetch('${API_BASE}/health');
             if (response.ok) {
                 serverStatusLed.className = "status-indicator online";
                 serverStatusText.innerText = "Connected";
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadInsights() {
         try {
-            const response = await fetch("${API_BASE}/model-insights");
+            const response = await fetch('${API_BASE}/model-insights');
             if (!response.ok) throw new Error();
             
             const data = await response.json();
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadHistory() {
         try {
-            const response = await fetch("/${API_BASE}submissions");
+            const response = await fetch('${API_BASE}/submissions');
             if (!response.ok) throw new Error("Failed to load submissions audit history.");
             
             const data = await response.json();
@@ -631,7 +631,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const interval = setInterval(async () => {
             attempts++;
             try {
-                const response = await fetch("${API_BASE}/health");
+                const response = await fetch('${API_BASE}/health');
                 if (response.ok) {
                     const data = await response.json();
                     if (data.model_trained && attempts > 1) {
